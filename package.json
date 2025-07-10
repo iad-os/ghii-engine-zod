@@ -1,0 +1,71 @@
+{
+  "name": "@ghii/ghii-engine-zod",
+  "version": "0.0.1",
+  "description": "A Zod engine for Ghii",
+  "maintainers": [
+    {
+      "name": "Daniele Fiungo",
+      "email": "daniele.fiungo@iad2.it"
+    },
+    {
+      "name": "Nicola Vurchio",
+      "email": "nicola.vurchio@iad2.it"
+    },
+    {
+      "name": "Irene La Bollita",
+      "email": "irene.labollita@iad2.it"
+    }
+  ],
+  "author": "Daniele Fiungo <daniele.fiungo@iad2.it>",
+  "type": "module",
+  "main": "build/lib/ghii.js",
+  "types": "build/types/ghii.d.ts",
+  "files": [
+    "build/**"
+  ],
+  "keywords": [
+    "node",
+    "config"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iad-os/ghii-engine-zod.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "lint": "biome check --write --no-errors-on-unmatched --json-formatter-enabled=true",
+    "format": "biome format --write --no-errors-on-unmatched --json-formatter-enabled=true",
+    "prebuild": "rimraf build",
+    "build": "tsc",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.1.1",
+    "@tsconfig/node22": "^22.0.2",
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^22.16.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "lefthook": "^1.12.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "peerDependencies": {
+    "zod": ">=3.25.76 < 5"
+  },
+  "dependencies": {
+    "@ghii/ghii-v2": "^0.0.3",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.merge": "^4.6.2"
+  }
+}
