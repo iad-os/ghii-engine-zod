@@ -1,9 +1,9 @@
-import { describe, expect, it } from "vitest";
-import * as z from "zod/v4";
-import { zodEngine } from "../ghiiEngineZod.js";
+import { describe, expect, it } from 'vitest';
+import * as z from 'zod/v4';
+import { zodEngine } from '../ghiiEngineZod.js';
 
-describe("Ghii Engine Zod Test", () => {
-  describe("zodEngine with function schema", () => {
+describe('Ghii Engine Zod Test', () => {
+  describe('zodEngine with function schema', () => {
     const userSchema = (zod: typeof z) =>
       zod.object({
         name: zod.string().min(1),
@@ -14,11 +14,11 @@ describe("Ghii Engine Zod Test", () => {
 
     const engine = zodEngine(userSchema);
 
-    it("should validate valid data successfully", () => {
+    it('should validate valid data successfully', () => {
       const validData = {
-        name: "John Doe",
+        name: 'John Doe',
         age: 30,
-        email: "john@example.com",
+        email: 'john@example.com',
         isActive: true,
       };
 
@@ -30,11 +30,11 @@ describe("Ghii Engine Zod Test", () => {
       }
     });
 
-    it("should validate valid data without optional fields", () => {
+    it('should validate valid data without optional fields', () => {
       const validData = {
-        name: "Jane Doe",
+        name: 'Jane Doe',
         age: 25,
-        email: "jane@example.com",
+        email: 'jane@example.com',
       };
 
       const result = engine.validate(validData);
@@ -45,13 +45,13 @@ describe("Ghii Engine Zod Test", () => {
       }
     });
 
-    it("should return validation errors for invalid data", () => {
+    it('should return validation errors for invalid data', () => {
       const invalidData = {
-        name: "",
+        name: '',
         age: -5,
-        email: "invalid-email",
+        email: 'invalid-email',
         // biome-ignore lint/suspicious/noExplicitAny: Test data
-        isActive: "not-boolean" as any,
+        isActive: 'not-boolean' as any,
       };
 
       const result = engine.validate(invalidData);
@@ -60,27 +60,27 @@ describe("Ghii Engine Zod Test", () => {
       if (!result.success) {
         expect(result.errors).toHaveLength(4);
 
-        const nameError = result.errors.find((e) => e.path === "name");
+        const nameError = result.errors.find(e => e.path === 'name');
         expect(nameError).toBeDefined();
-        expect(nameError?.message).toContain("Too small");
+        expect(nameError?.message).toContain('Too small');
 
-        const ageError = result.errors.find((e) => e.path === "age");
+        const ageError = result.errors.find(e => e.path === 'age');
         expect(ageError).toBeDefined();
-        expect(ageError?.message).toContain("Too small");
+        expect(ageError?.message).toContain('Too small');
 
-        const emailError = result.errors.find((e) => e.path === "email");
+        const emailError = result.errors.find(e => e.path === 'email');
         expect(emailError).toBeDefined();
-        expect(emailError?.message).toContain("Invalid email");
+        expect(emailError?.message).toContain('Invalid email');
 
-        const isActiveError = result.errors.find((e) => e.path === "isActive");
+        const isActiveError = result.errors.find(e => e.path === 'isActive');
         expect(isActiveError).toBeDefined();
-        expect(isActiveError?.message).toContain("Invalid input");
+        expect(isActiveError?.message).toContain('Invalid input');
       }
     });
 
-    it("should return validation errors for missing required fields", () => {
+    it('should return validation errors for missing required fields', () => {
       const invalidData = {
-        name: "John Doe",
+        name: 'John Doe',
         // missing age and email
         // biome-ignore lint/suspicious/noExplicitAny: Test data
       } as any;
@@ -91,17 +91,17 @@ describe("Ghii Engine Zod Test", () => {
       if (!result.success) {
         expect(result.errors).toHaveLength(2);
 
-        const ageError = result.errors.find((e) => e.path === "age");
+        const ageError = result.errors.find(e => e.path === 'age');
         expect(ageError).toBeDefined();
-        expect(ageError?.message).toContain("Invalid input");
+        expect(ageError?.message).toContain('Invalid input');
 
-        const emailError = result.errors.find((e) => e.path === "email");
+        const emailError = result.errors.find(e => e.path === 'email');
         expect(emailError).toBeDefined();
-        expect(emailError?.message).toContain("Invalid input");
+        expect(emailError?.message).toContain('Invalid input');
       }
     });
 
-    it("should generate JSON schema", () => {
+    it('should generate JSON schema', () => {
       const schema = engine.toJsonSchema();
 
       expect(schema).toBeDefined();
@@ -111,7 +111,7 @@ describe("Ghii Engine Zod Test", () => {
     });
   });
 
-  describe("zodEngine with direct schema", () => {
+  describe('zodEngine with direct schema', () => {
     const directSchema = z.object({
       id: z.number().int().positive(),
       title: z.string().min(1).max(100),
@@ -120,11 +120,11 @@ describe("Ghii Engine Zod Test", () => {
 
     const engine = zodEngine(directSchema);
 
-    it("should validate valid data successfully", () => {
+    it('should validate valid data successfully', () => {
       const validData = {
         id: 1,
-        title: "Test Title",
-        tags: ["tag1", "tag2"],
+        title: 'Test Title',
+        tags: ['tag1', 'tag2'],
       };
 
       const result = engine.validate(validData);
@@ -135,10 +135,10 @@ describe("Ghii Engine Zod Test", () => {
       }
     });
 
-    it("should validate valid data without optional fields", () => {
+    it('should validate valid data without optional fields', () => {
       const validData = {
         id: 2,
-        title: "Another Title",
+        title: 'Another Title',
       };
 
       const result = engine.validate(validData);
@@ -149,11 +149,12 @@ describe("Ghii Engine Zod Test", () => {
       }
     });
 
-    it("should return validation errors for invalid data", () => {
+    it('should return validation errors for invalid data', () => {
       const invalidData = {
         id: 0, // not positive
-        title: "", // empty string
-        tags: [123, "tag2"] as any, // invalid array element
+        title: '', // empty string
+        // biome-ignore lint/suspicious/noExplicitAny: Test data
+        tags: [123, 'tag2'] as any, // invalid array element
       };
 
       const result = engine.validate(invalidData);
@@ -162,21 +163,21 @@ describe("Ghii Engine Zod Test", () => {
       if (!result.success) {
         expect(result.errors).toHaveLength(3);
 
-        const idError = result.errors.find((e) => e.path === "id");
+        const idError = result.errors.find(e => e.path === 'id');
         expect(idError).toBeDefined();
-        expect(idError?.message).toContain("Too small");
+        expect(idError?.message).toContain('Too small');
 
-        const titleError = result.errors.find((e) => e.path === "title");
+        const titleError = result.errors.find(e => e.path === 'title');
         expect(titleError).toBeDefined();
-        expect(titleError?.message).toContain("Too small");
+        expect(titleError?.message).toContain('Too small');
 
-        const tagsError = result.errors.find((e) => e.path === "tags.0");
+        const tagsError = result.errors.find(e => e.path === 'tags.0');
         expect(tagsError).toBeDefined();
-        expect(tagsError?.message).toContain("Invalid input");
+        expect(tagsError?.message).toContain('Invalid input');
       }
     });
 
-    it("should generate JSON schema", () => {
+    it('should generate JSON schema', () => {
       const schema = engine.toJsonSchema();
       expect(schema).toMatchInlineSnapshot(
         `"{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":{"id":{"type":"integer","exclusiveMinimum":0,"maximum":9007199254740991},"title":{"type":"string","minLength":1,"maxLength":100},"tags":{"type":"array","items":{"type":"string"}}},"required":["id","title"],"additionalProperties":false}"`
@@ -184,7 +185,7 @@ describe("Ghii Engine Zod Test", () => {
     });
   });
 
-  describe("zodEngine with complex nested schema", () => {
+  describe('zodEngine with complex nested schema', () => {
     const complexSchema = (zod: typeof z) =>
       zod.object({
         user: zod.object({
@@ -193,7 +194,7 @@ describe("Ghii Engine Zod Test", () => {
             lastName: zod.string(),
             preferences: zod
               .object({
-                theme: zod.enum(["light", "dark"]),
+                theme: zod.enum(['light', 'dark']),
                 notifications: zod.boolean(),
               })
               .optional(),
@@ -213,25 +214,25 @@ describe("Ghii Engine Zod Test", () => {
 
     const engine = zodEngine(complexSchema);
 
-    it("should validate complex nested data successfully", () => {
+    it('should validate complex nested data successfully', () => {
       const validData: z.infer<ReturnType<typeof complexSchema>> = {
         user: {
           profile: {
-            firstName: "John",
-            lastName: "Doe",
+            firstName: 'John',
+            lastName: 'Doe',
             preferences: {
-              theme: "dark",
+              theme: 'dark',
               notifications: true,
             },
           },
           settings: [
-            { key: "language", value: "en" },
-            { key: "timezone", value: "UTC" },
-            { key: "debug", value: false },
+            { key: 'language', value: 'en' },
+            { key: 'timezone', value: 'UTC' },
+            { key: 'debug', value: false },
           ],
         },
         metadata: {
-          createdAt: "2023-01-01T00:00:00.000Z",
+          createdAt: '2023-01-01T00:00:00.000Z',
           version: 1,
         },
       };
@@ -244,24 +245,24 @@ describe("Ghii Engine Zod Test", () => {
       }
     });
 
-    it("should return validation errors for nested invalid data", () => {
+    it('should return validation errors for nested invalid data', () => {
       const invalidData = {
         user: {
           profile: {
-            firstName: "", // empty string
-            lastName: "Doe",
+            firstName: '', // empty string
+            lastName: 'Doe',
             preferences: {
-              theme: "invalid-theme", // invalid enum
-              notifications: "not-boolean", // invalid type
+              theme: 'invalid-theme', // invalid enum
+              notifications: 'not-boolean', // invalid type
             },
           },
           settings: [
-            { key: "language", value: "en" },
-            { key: "timezone", value: null }, // invalid union type
+            { key: 'language', value: 'en' },
+            { key: 'timezone', value: null }, // invalid union type
           ],
         },
         metadata: {
-          createdAt: "invalid-date", // invalid datetime
+          createdAt: 'invalid-date', // invalid datetime
           version: 0, // not positive
         },
       };
@@ -273,10 +274,10 @@ describe("Ghii Engine Zod Test", () => {
       if (!result.success) {
         expect(result.errors.length).toBeGreaterThan(0);
         // Zod v4 may report the path as just ['firstName']
-        const firstNameError = result.errors.find((e) => e.path.endsWith("firstName"));
+        const firstNameError = result.errors.find(e => e.path.endsWith('firstName'));
         expect(firstNameError).toBeDefined();
 
-        const themeError = result.errors.find((e) => e.path.endsWith("theme"));
+        const themeError = result.errors.find(e => e.path.endsWith('theme'));
         expect(themeError).toMatchInlineSnapshot(`
           {
             "_raw": {
@@ -300,7 +301,7 @@ describe("Ghii Engine Zod Test", () => {
           }
         `);
 
-        const notificationsError = result.errors.find((e) => e.path.endsWith("notifications"));
+        const notificationsError = result.errors.find(e => e.path.endsWith('notifications'));
         expect(notificationsError).toMatchInlineSnapshot(`
           {
             "_raw": {
@@ -321,7 +322,7 @@ describe("Ghii Engine Zod Test", () => {
           }
         `);
 
-        const timezoneError = result.errors.find((e) => e.path.endsWith("settings.1.value"));
+        const timezoneError = result.errors.find(e => e.path.endsWith('settings.1.value'));
         expect(timezoneError).toMatchInlineSnapshot(`
           {
             "_raw": {
@@ -367,7 +368,7 @@ describe("Ghii Engine Zod Test", () => {
           }
         `);
 
-        const createdAtError = result.errors.find((e) => e.path.endsWith("createdAt"));
+        const createdAtError = result.errors.find(e => e.path.endsWith('createdAt'));
         expect(createdAtError).toMatchInlineSnapshot(`
           {
             "_raw": {
@@ -388,7 +389,7 @@ describe("Ghii Engine Zod Test", () => {
           }
         `);
 
-        const versionError = result.errors.find((e) => e.path.endsWith("version"));
+        const versionError = result.errors.find(e => e.path.endsWith('version'));
         expect(versionError).toMatchInlineSnapshot(`
           {
             "_raw": {
@@ -411,19 +412,18 @@ describe("Ghii Engine Zod Test", () => {
       }
     });
 
-    it("should generate JSON schema for complex schema", () => {
+    it('should generate JSON schema for complex schema', () => {
       const schema = engine.toJsonSchema();
 
       expect(schema).toMatchInlineSnapshot(
         `"{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":{"user":{"type":"object","properties":{"profile":{"type":"object","properties":{"firstName":{"type":"string","minLength":1},"lastName":{"type":"string"},"preferences":{"type":"object","properties":{"theme":{"type":"string","enum":["light","dark"]},"notifications":{"type":"boolean"}},"required":["theme","notifications"],"additionalProperties":false}},"required":["firstName","lastName"],"additionalProperties":false},"settings":{"type":"array","items":{"type":"object","properties":{"key":{"type":"string"},"value":{"anyOf":[{"type":"string"},{"type":"number"},{"type":"boolean"}]}},"required":["key","value"],"additionalProperties":false}}},"required":["profile","settings"],"additionalProperties":false},"metadata":{"type":"object","properties":{"createdAt":{"type":"string","format":"date-time","pattern":"^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))T(?:(?:[01]\\\\d|2[0-3]):[0-5]\\\\d(?::[0-5]\\\\d(?:\\\\.\\\\d+)?)?(?:Z))$"},"version":{"type":"integer","exclusiveMinimum":0,"maximum":9007199254740991}},"required":["createdAt","version"],"additionalProperties":false}},"required":["user","metadata"],"additionalProperties":false}"`
       );
     });
-    it("should generate Pretty JSON schema for complex schema", () => {
+    it('should generate Pretty JSON schema for complex schema', () => {
       const schema = engine.toJsonSchema(true);
 
       expect(schema).toMatchInlineSnapshot(
-
-      `
+        `
         "{
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
@@ -531,11 +531,12 @@ describe("Ghii Engine Zod Test", () => {
           ],
           "additionalProperties": false
         }"
-      `);
+      `
+      );
     });
   });
 
-  describe("zodEngine error structure", () => {
+  describe('zodEngine error structure', () => {
     const simpleSchema = z.object({
       name: z.string(),
       age: z.number(),
@@ -543,38 +544,39 @@ describe("Ghii Engine Zod Test", () => {
 
     const engine = zodEngine(simpleSchema);
 
-    it("should return properly structured error objects", () => {
+    it('should return properly structured error objects', () => {
       const invalidData = {
         name: 123, // wrong type
-        age: "not-a-number", // wrong type
+        age: 'not-a-number', // wrong type
       };
 
+      // biome-ignore lint/suspicious/noExplicitAny: Test data
       const result = engine.validate(invalidData as any);
 
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.errors).toHaveLength(2);
 
-        result.errors.forEach((error) => {
-          expect(error).toHaveProperty("path");
-          expect(error).toHaveProperty("input");
-          expect(error).toHaveProperty("details");
-          expect(error).toHaveProperty("message");
-          expect(error).toHaveProperty("_raw");
+        result.errors.forEach(error => {
+          expect(error).toHaveProperty('path');
+          expect(error).toHaveProperty('input');
+          expect(error).toHaveProperty('details');
+          expect(error).toHaveProperty('message');
+          expect(error).toHaveProperty('_raw');
 
-          expect(typeof error.path).toBe("string");
-          expect(typeof error.message).toBe("string");
-          expect(typeof error.details).toBe("string");
+          expect(typeof error.path).toBe('string');
+          expect(typeof error.message).toBe('string');
+          expect(typeof error.details).toBe('string');
           expect(error._raw).toBeDefined();
         });
 
         // Zod v4 may report the error path as 'name' or 'name.0' for type errors
-        const nameError = result.errors.find((e) => e.path.startsWith("name"));
+        const nameError = result.errors.find(e => e.path.startsWith('name'));
 
-        expect(nameError?.message).toContain("Invalid input: expected string, received number");
+        expect(nameError?.message).toContain('Invalid input: expected string, received number');
 
-        const ageError = result.errors.find((e) => e.path === "age");
-        expect(ageError?.message).toContain("Invalid input: expected number, received string");
+        const ageError = result.errors.find(e => e.path === 'age');
+        expect(ageError?.message).toContain('Invalid input: expected number, received string');
       }
     });
   });

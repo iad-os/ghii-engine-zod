@@ -1,17 +1,17 @@
-import { describe, expectTypeOf, it } from "vitest";
-import * as z from "zod/v4";
-import { type ZodSchemaFactory, zodEngine } from "../ghiiEngineZod.js";
+import { describe, expectTypeOf, it } from 'vitest';
+import * as z from 'zod/v4';
+import { type ZodSchemaFactory, zodEngine } from '../ghiiEngineZod.js';
 
-describe("Ghii Engine Zod TypesTest", () => {
-  it("should have correct ZodSchemaFactory type", () => {
-    const factory: ZodSchemaFactory<z.ZodString> = (zod) => zod.string();
+describe('Ghii Engine Zod TypesTest', () => {
+  it('should have correct ZodSchemaFactory type', () => {
+    const factory: ZodSchemaFactory<z.ZodString> = zod => zod.string();
     expectTypeOf(factory).toBeFunction();
     expectTypeOf(factory).parameter(0).toEqualTypeOf<typeof z>();
     expectTypeOf(factory).returns.toEqualTypeOf<z.ZodString>();
   });
 
-  it("should work with function schema factory", () => {
-    const engine = zodEngine((zod) =>
+  it('should work with function schema factory', () => {
+    const engine = zodEngine(zod =>
       zod.object({
         name: zod.string(),
         age: zod.number(),
@@ -35,7 +35,7 @@ describe("Ghii Engine Zod TypesTest", () => {
     }>();
   });
 
-  it("should work with direct schema", () => {
+  it('should work with direct schema', () => {
     const schema = z.object({
       email: z.string().email(),
       password: z.string().min(8),
@@ -60,7 +60,7 @@ describe("Ghii Engine Zod TypesTest", () => {
     }>();
   });
 
-  it("should handle primitive types", () => {
+  it('should handle primitive types', () => {
     const stringEngine = zodEngine(z.string());
     expectTypeOf(stringEngine.validate).parameter(0).toEqualTypeOf<string>();
 
@@ -71,17 +71,17 @@ describe("Ghii Engine Zod TypesTest", () => {
     expectTypeOf(booleanEngine.validate).parameter(0).toEqualTypeOf<boolean>();
   });
 
-  it("should handle array types", () => {
+  it('should handle array types', () => {
     const arrayEngine = zodEngine(z.array(z.string()));
     expectTypeOf(arrayEngine.validate).parameter(0).toEqualTypeOf<string[]>();
   });
 
-  it("should handle union types", () => {
+  it('should handle union types', () => {
     const unionEngine = zodEngine(z.union([z.string(), z.number()]));
     expectTypeOf(unionEngine.validate).parameter(0).toEqualTypeOf<string | number>();
   });
 
-  it("should handle optional fields", () => {
+  it('should handle optional fields', () => {
     const optionalEngine = zodEngine(
       z.object({
         required: z.string(),
@@ -95,7 +95,7 @@ describe("Ghii Engine Zod TypesTest", () => {
     }>();
   });
 
-  it("should handle nested objects", () => {
+  it('should handle nested objects', () => {
     const nestedEngine = zodEngine(
       z.object({
         user: z.object({
@@ -104,7 +104,7 @@ describe("Ghii Engine Zod TypesTest", () => {
             avatar: z.string().url().optional(),
           }),
           settings: z.object({
-            theme: z.enum(["light", "dark"]),
+            theme: z.enum(['light', 'dark']),
             notifications: z.boolean(),
           }),
         }),
@@ -118,15 +118,15 @@ describe("Ghii Engine Zod TypesTest", () => {
           avatar?: string | undefined;
         };
         settings: {
-          theme: "light" | "dark";
+          theme: 'light' | 'dark';
           notifications: boolean;
         };
       };
     }>();
   });
 
-  it("should handle complex schemas with factory function", () => {
-    const complexEngine = zodEngine((zod) =>
+  it('should handle complex schemas with factory function', () => {
+    const complexEngine = zodEngine(zod =>
       zod.object({
         id: zod.string().uuid(),
         metadata: zod.record(zod.string(), zod.unknown()),
@@ -145,9 +145,9 @@ describe("Ghii Engine Zod TypesTest", () => {
     }>();
   });
 
-  it("should have correct return types for validate method", () => {
+  it('should have correct return types for validate method', () => {
     const engine = zodEngine(z.object({ name: z.string() }));
-    const result = engine.validate({ name: "test" });
+    const result = engine.validate({ name: 'test' });
 
     if (result.success) {
       expectTypeOf(result.value).toExtend<{ name: string }>();
@@ -158,38 +158,38 @@ describe("Ghii Engine Zod TypesTest", () => {
     }
   });
 
-  it("should have correct return type for toSchema method", () => {
+  it('should have correct return type for toSchema method', () => {
     const engine = zodEngine(z.object({ name: z.string() }));
     const schema = engine.toJsonSchema();
 
     expectTypeOf(schema).toExtend<string>();
   });
 
-  it("should handle literal types", () => {
+  it('should handle literal types', () => {
     const literalEngine = zodEngine(
       z.object({
-        status: z.literal("success"),
+        status: z.literal('success'),
         code: z.literal(200),
       })
     );
 
     expectTypeOf(literalEngine.validate).parameter(0).toEqualTypeOf<{
-      status: "success";
+      status: 'success';
       code: 200;
     }>();
   });
 
-  it("should handle enum types", () => {
+  it('should handle enum types', () => {
     const enumEngine = zodEngine(
       z.object({
-        role: z.enum(["admin", "user", "guest"]),
-        permission: z.enum(["read", "write", "delete"]),
+        role: z.enum(['admin', 'user', 'guest']),
+        permission: z.enum(['read', 'write', 'delete']),
       })
     );
 
     expectTypeOf(enumEngine.validate).parameter(0).toEqualTypeOf<{
-      role: "admin" | "user" | "guest";
-      permission: "read" | "write" | "delete";
+      role: 'admin' | 'user' | 'guest';
+      permission: 'read' | 'write' | 'delete';
     }>();
   });
 });
