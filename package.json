@@ -1,6 +1,6 @@
 {
   "name": "@ghii/ghii-engine-zod",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Zod engine for Ghii",
   "maintainers": [
     {
@@ -18,8 +18,8 @@
   ],
   "author": "Daniele Fiungo <daniele.fiungo@iad2.it>",
   "type": "module",
-  "main": "build/lib/ghii.js",
-  "types": "build/types/ghii.d.ts",
+  "main": "build/lib/ghiiEngineZod.js",
+  "types": "build/types/ghiiEngineZod.d.ts",
   "files": ["build/**"],
   "keywords": ["node", "config"],
   "repository": {
@@ -56,10 +56,10 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "zod": ">=3.25.76 < 5"
+    "zod": ">=3.25.76 < 5",
+    "@ghii/ghii-v2": ">=0.0.3"
   },
   "dependencies": {
-    "@ghii/ghii-v2": "^0.0.3",
     "lodash.clonedeep": "^4.5.0",
     "lodash.merge": "^4.6.2"
   }
