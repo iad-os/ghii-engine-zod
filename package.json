@@ -1,6 +1,6 @@
 {
   "name": "@ghii/ghii-engine-zod",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Zod engine for Ghii",
   "maintainers": [
     {
@@ -20,8 +20,13 @@
   "type": "module",
   "main": "build/lib/ghiiEngineZod.js",
   "types": "build/types/ghiiEngineZod.d.ts",
-  "files": ["build/**"],
-  "keywords": ["node", "config"],
+  "files": [
+    "build/**"
+  ],
+  "keywords": [
+    "node",
+    "config"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iad-os/ghii-engine-zod.git"
@@ -59,8 +64,5 @@
     "zod": ">=3.25.76 < 5",
     "@ghii/ghii-v2": ">=0.0.3"
   },
-  "dependencies": {
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.merge": "^4.6.2"
-  }
+  "dependencies": {}
 }
