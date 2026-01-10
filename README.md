@@ -3,7 +3,7 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-blue.svg)](https://www.typescriptlang.org/)
-[![Zod](https://img.shields.io/badge/Zod-3.25.76+-purple.svg)](https://zod.dev/)
+[![Zod](https://img.shields.io/badge/Zod-4.0+-purple.svg)](https://zod.dev/)
 
 A Zod validation engine for [GHII](https://github.com/iad-os/ghii), the powerful configuration management library. This package provides seamless integration between Zod schemas and GHII's validation system.
 
@@ -44,7 +44,7 @@ GHII Zod Engine is a validation engine that bridges the gap between [Zod](https:
 
 - Node.js 22 or higher
 - TypeScript 5.8+ (recommended)
-- Zod 3.25.76 or higher
+- Zod 4.0 or higher (v4 is now the default)
 
 ### Installation Commands
 
@@ -63,7 +63,7 @@ This package is written in TypeScript and provides full type definitions out of 
 ```typescript
 import { ghii } from "@ghii/ghii-v2";
 import { zodEngine } from "@ghii/ghii-engine-zod";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 // Define your configuration schema
 const configSchema = z.object({
@@ -72,7 +72,7 @@ const configSchema = z.object({
     host: z.string().default("localhost"),
   }),
   database: z.object({
-    url: z.string().url(),
+    url: z.url(),
     poolSize: z.number().min(1).max(20).default(10),
   }),
 });
@@ -100,7 +100,7 @@ console.log(snapshot);
 ```typescript
 import { ghii } from "@ghii/ghii-v2";
 import { zodEngine } from "@ghii/ghii-engine-zod";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 // Simple configuration with defaults
 const appConfig = ghii(
@@ -161,7 +161,7 @@ const engine = zodEngine((z) =>
 ```typescript
 import { ghii } from "@ghii/ghii-v2";
 import { zodEngine } from "@ghii/ghii-engine-zod";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 const config = ghii(
   zodEngine(
@@ -189,7 +189,7 @@ const config = ghii(
   zodEngine(
     z.object({
       database: z.object({
-        url: z.string().url(),
+        url: z.url(),
         poolSize: z.number().min(1).max(20),
       }),
       server: z.object({
@@ -237,12 +237,12 @@ const config = ghii(
 ### Schema Factory Pattern
 
 ```typescript
-const createConfigSchema = (z: typeof import("zod/v4").z) =>
+const createConfigSchema = (z: typeof import("zod").z) =>
   z.object({
     environment: z.enum(["development", "production", "test"]),
     database: z
       .object({
-        url: z.string().url(),
+        url: z.url(),
         ssl: z.boolean().default(false),
       })
       .refine(
@@ -338,7 +338,7 @@ const config = ghii(
 ```typescript
 import { ghii } from "@ghii/ghii-v2";
 import { zodEngine } from "@ghii/ghii-engine-zod";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 const schema = z.object({
   server: z.object({
@@ -346,7 +346,7 @@ const schema = z.object({
     host: z.string(),
   }),
   database: z.object({
-    url: z.string().url(),
+    url: z.url(),
     poolSize: z.number(),
   }),
 });

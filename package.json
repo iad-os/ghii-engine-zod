@@ -1,6 +1,6 @@
 {
   "name": "@ghii/ghii-engine-zod",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A Zod engine for Ghii",
   "maintainers": [
     {
