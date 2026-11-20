@@ -106,7 +106,7 @@ describe('Ghii Engine Zod Test', () => {
 
       expect(schema).toBeDefined();
       expect(schema).toMatchInlineSnapshot(
-        `"{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":{"name":{"type":"string","minLength":1},"age":{"type":"number","minimum":0,"maximum":150},"email":{"type":"string","format":"email","pattern":"^(?!\\\\.)(?!.*\\\\.\\\\.)([A-Za-z0-9_'+\\\\-\\\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\\-]*\\\\.)+[A-Za-z]{2,}$"},"isActive":{"type":"boolean"}},"required":["name","age","email"],"additionalProperties":false}"`
+        `"{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":{"name":{"type":"string","minLength":1},"age":{"type":"number","minimum":0,"maximum":150},"email":{"type":"string","format":"email","pattern":"^(?:[A-Za-z0-9_'+\\\\-]+\\\\.)*[A-Za-z0-9_'+\\\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\\\-]*\\\\.)+[A-Za-z]{2,}$"},"isActive":{"type":"boolean"}},"required":["name","age","email"],"additionalProperties":false}"`
       );
     });
   });
@@ -380,7 +380,7 @@ describe('Ghii Engine Zod Test', () => {
                 "metadata",
                 "createdAt",
               ],
-              "pattern": "/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/",
+              "pattern": "/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$/",
             },
             "details": "invalid_format",
             "input": undefined,
@@ -416,7 +416,7 @@ describe('Ghii Engine Zod Test', () => {
       const schema = engine.toJsonSchema();
 
       expect(schema).toMatchInlineSnapshot(
-        `"{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":{"user":{"type":"object","properties":{"profile":{"type":"object","properties":{"firstName":{"type":"string","minLength":1},"lastName":{"type":"string"},"preferences":{"type":"object","properties":{"theme":{"type":"string","enum":["light","dark"]},"notifications":{"type":"boolean"}},"required":["theme","notifications"],"additionalProperties":false}},"required":["firstName","lastName"],"additionalProperties":false},"settings":{"type":"array","items":{"type":"object","properties":{"key":{"type":"string"},"value":{"anyOf":[{"type":"string"},{"type":"number"},{"type":"boolean"}]}},"required":["key","value"],"additionalProperties":false}}},"required":["profile","settings"],"additionalProperties":false},"metadata":{"type":"object","properties":{"createdAt":{"type":"string","format":"date-time","pattern":"^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))T(?:(?:[01]\\\\d|2[0-3]):[0-5]\\\\d(?::[0-5]\\\\d(?:\\\\.\\\\d+)?)?(?:Z))$"},"version":{"type":"integer","exclusiveMinimum":0,"maximum":9007199254740991}},"required":["createdAt","version"],"additionalProperties":false}},"required":["user","metadata"],"additionalProperties":false}"`
+        `"{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":{"user":{"type":"object","properties":{"profile":{"type":"object","properties":{"firstName":{"type":"string","minLength":1},"lastName":{"type":"string"},"preferences":{"type":"object","properties":{"theme":{"type":"string","enum":["light","dark"]},"notifications":{"type":"boolean"}},"required":["theme","notifications"],"additionalProperties":false}},"required":["firstName","lastName"],"additionalProperties":false},"settings":{"type":"array","items":{"type":"object","properties":{"key":{"type":"string"},"value":{"type":["string","number","boolean"]}},"required":["key","value"],"additionalProperties":false}}},"required":["profile","settings"],"additionalProperties":false},"metadata":{"type":"object","properties":{"createdAt":{"type":"string","format":"date-time","pattern":"^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))T(?:(?:[01]\\\\d|2[0-3]):[0-5]\\\\d:[0-5]\\\\d(?:\\\\.\\\\d+)?(?:Z))$"},"version":{"type":"integer","exclusiveMinimum":0,"maximum":9007199254740991}},"required":["createdAt","version"],"additionalProperties":false}},"required":["user","metadata"],"additionalProperties":false}"`
       );
     });
     it('should generate Pretty JSON schema for complex schema', () => {
@@ -477,16 +477,10 @@ describe('Ghii Engine Zod Test', () => {
                         "type": "string"
                       },
                       "value": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "number"
-                          },
-                          {
-                            "type": "boolean"
-                          }
+                        "type": [
+                          "string",
+                          "number",
+                          "boolean"
                         ]
                       }
                     },
@@ -510,7 +504,7 @@ describe('Ghii Engine Zod Test', () => {
                 "createdAt": {
                   "type": "string",
                   "format": "date-time",
-                  "pattern": "^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))T(?:(?:[01]\\\\d|2[0-3]):[0-5]\\\\d(?::[0-5]\\\\d(?:\\\\.\\\\d+)?)?(?:Z))$"
+                  "pattern": "^(?:(?:\\\\d\\\\d[2468][048]|\\\\d\\\\d[13579][26]|\\\\d\\\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\\\d|30)|(?:02)-(?:0[1-9]|1\\\\d|2[0-8])))T(?:(?:[01]\\\\d|2[0-3]):[0-5]\\\\d:[0-5]\\\\d(?:\\\\.\\\\d+)?(?:Z))$"
                 },
                 "version": {
                   "type": "integer",

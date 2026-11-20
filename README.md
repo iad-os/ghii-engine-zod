@@ -1,6 +1,6 @@
 # GHII Zod Engine
 
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D24-brightgreen.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-blue.svg)](https://www.typescriptlang.org/)
 [![Zod](https://img.shields.io/badge/Zod-4.0+-purple.svg)](https://zod.dev/)
@@ -42,7 +42,7 @@ GHII Zod Engine is a validation engine that bridges the gap between [Zod](https:
 
 ### Prerequisites
 
-- Node.js 22 or higher
+- Node.js 24 or higher
 - TypeScript 5.8+ (recommended)
 - Zod 4.0 or higher (v4 is now the default)
 
@@ -61,15 +61,15 @@ This package is written in TypeScript and provides full type definitions out of 
 ### Basic Setup
 
 ```typescript
-import { ghii } from "@ghii/ghii-v2";
-import { zodEngine } from "@ghii/ghii-engine-zod";
-import { z } from "zod";
+import { ghii } from '@ghii/ghii-v2';
+import { zodEngine } from '@ghii/ghii-engine-zod';
+import { z } from 'zod';
 
 // Define your configuration schema
 const configSchema = z.object({
   server: z.object({
     port: z.number().default(3000),
-    host: z.string().default("localhost"),
+    host: z.string().default('localhost'),
   }),
   database: z.object({
     url: z.url(),
@@ -81,12 +81,12 @@ const configSchema = z.object({
 const config = ghii(zodEngine(configSchema))
   .loader(async () => ({
     database: {
-      url: process.env.DATABASE_URL || "postgresql://localhost:5432/myapp",
+      url: process.env.DATABASE_URL || 'postgresql://localhost:5432/myapp',
     },
   }))
   .loader(async () => ({
     server: {
-      port: parseInt(process.env.PORT || "3000"),
+      port: parseInt(process.env.PORT || '3000'),
     },
   }));
 
@@ -98,16 +98,16 @@ console.log(snapshot);
 ### Simple Configuration Example
 
 ```typescript
-import { ghii } from "@ghii/ghii-v2";
-import { zodEngine } from "@ghii/ghii-engine-zod";
-import { z } from "zod";
+import { ghii } from '@ghii/ghii-v2';
+import { zodEngine } from '@ghii/ghii-engine-zod';
+import { z } from 'zod';
 
 // Simple configuration with defaults
 const appConfig = ghii(
   zodEngine(
     z.object({
-      name: z.string().default("my-app"),
-      version: z.string().default("1.0.0"),
+      name: z.string().default('my-app'),
+      version: z.string().default('1.0.0'),
       debug: z.boolean().default(false),
     })
   )
@@ -146,7 +146,7 @@ const engine = zodEngine(
 **Schema Factory:**
 
 ```typescript
-const engine = zodEngine((z) =>
+const engine = zodEngine(z =>
   z.object({
     name: z.string(),
     port: z.number(),
@@ -159,9 +159,9 @@ const engine = zodEngine((z) =>
 ### Basic Configuration
 
 ```typescript
-import { ghii } from "@ghii/ghii-v2";
-import { zodEngine } from "@ghii/ghii-engine-zod";
-import { z } from "zod";
+import { ghii } from '@ghii/ghii-v2';
+import { zodEngine } from '@ghii/ghii-engine-zod';
+import { z } from 'zod';
 
 const config = ghii(
   zodEngine(
@@ -174,8 +174,8 @@ const config = ghii(
   )
 ).loader(() => ({
   app: {
-    name: "my-app",
-    version: "1.0.0",
+    name: 'my-app',
+    version: '1.0.0',
   },
 }));
 
@@ -201,11 +201,11 @@ const config = ghii(
 ).loader(() => ({
   database: {
     url: process.env.DATABASE_URL!,
-    poolSize: parseInt(process.env.DB_POOL_SIZE || "10"),
+    poolSize: parseInt(process.env.DB_POOL_SIZE || '10'),
   },
   server: {
-    port: parseInt(process.env.PORT || "3000"),
-    host: process.env.HOST || "localhost",
+    port: parseInt(process.env.PORT || '3000'),
+    host: process.env.HOST || 'localhost',
   },
 }));
 ```
@@ -217,7 +217,7 @@ const config = ghii(
   zodEngine(
     z.object({
       api: z.object({
-        key: z.string().min(32, "API key must be at least 32 characters"),
+        key: z.string().min(32, 'API key must be at least 32 characters'),
         rateLimit: z.object({
           requests: z.number().positive(),
           window: z.number().positive(),
@@ -228,7 +228,7 @@ const config = ghii(
           cache: z.boolean(),
           compression: z.boolean(),
         })
-        .refine((data) => data.cache || data.compression, "At least one feature must be enabled"),
+        .refine(data => data.cache || data.compression, 'At least one feature must be enabled'),
     })
   )
 );
@@ -237,18 +237,15 @@ const config = ghii(
 ### Schema Factory Pattern
 
 ```typescript
-const createConfigSchema = (z: typeof import("zod").z) =>
+const createConfigSchema = (z: typeof import('zod').z) =>
   z.object({
-    environment: z.enum(["development", "production", "test"]),
+    environment: z.enum(['development', 'production', 'test']),
     database: z
       .object({
         url: z.url(),
         ssl: z.boolean().default(false),
       })
-      .refine(
-        (data) => (data.environment === "production" ? data.ssl : true),
-        "SSL is required in production"
-      ),
+      .refine(data => (data.environment === 'production' ? data.ssl : true), 'SSL is required in production'),
   });
 
 const config = ghii(zodEngine(createConfigSchema));
@@ -262,15 +259,11 @@ const config = ghii(zodEngine(createConfigSchema));
 const config = ghii(
   zodEngine(
     z.object({
-      port: z
-        .number()
-        .min(1, "Port must be at least 1")
-        .max(65535, "Port must be at most 65535")
-        .default(3000),
+      port: z.number().min(1, 'Port must be at least 1').max(65535, 'Port must be at most 65535').default(3000),
       apiKey: z
         .string()
-        .min(32, "API key must be at least 32 characters long")
-        .regex(/^[A-Za-z0-9]+$/, "API key must contain only alphanumeric characters"),
+        .min(32, 'API key must be at least 32 characters long')
+        .regex(/^[A-Za-z0-9]+$/, 'API key must contain only alphanumeric characters'),
     })
   )
 );
@@ -283,23 +276,23 @@ const config = ghii(
   zodEngine(
     z
       .object({
-        mode: z.enum(["development", "production"]),
+        mode: z.enum(['development', 'production']),
         debug: z.boolean(),
-        logLevel: z.enum(["error", "warn", "info", "debug"]),
+        logLevel: z.enum(['error', 'warn', 'info', 'debug']),
       })
       .refine(
-        (data) => {
-          if (data.mode === "production" && data.debug) {
+        data => {
+          if (data.mode === 'production' && data.debug) {
             return false;
           }
-          if (data.mode === "development" && data.logLevel === "error") {
+          if (data.mode === 'development' && data.logLevel === 'error') {
             return false;
           }
           return true;
         },
         {
           message:
-            "Invalid configuration: debug mode cannot be enabled in production, and development mode requires more verbose logging",
+            'Invalid configuration: debug mode cannot be enabled in production, and development mode requires more verbose logging',
         }
       )
   )
@@ -320,7 +313,7 @@ const config = ghii(
             weight: z.number().min(0).max(1),
           })
         )
-        .min(1, "At least one server must be configured"),
+        .min(1, 'At least one server must be configured'),
       cache: z.record(
         z.string(),
         z.object({
@@ -336,9 +329,9 @@ const config = ghii(
 ### Type Inference
 
 ```typescript
-import { ghii } from "@ghii/ghii-v2";
-import { zodEngine } from "@ghii/ghii-engine-zod";
-import { z } from "zod";
+import { ghii } from '@ghii/ghii-v2';
+import { zodEngine } from '@ghii/ghii-engine-zod';
+import { z } from 'zod';
 
 const schema = z.object({
   server: z.object({
